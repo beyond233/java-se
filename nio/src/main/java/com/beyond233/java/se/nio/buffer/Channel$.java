@@ -2,9 +2,7 @@ package com.beyond233.java.se.nio.buffer;
 
 import org.junit.Test;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
 import java.io.*;
-import java.lang.annotation.IncompleteAnnotationException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
