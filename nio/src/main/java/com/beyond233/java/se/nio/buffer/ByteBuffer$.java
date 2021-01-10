@@ -1,16 +1,23 @@
 package com.beyond233.java.se.nio.buffer;
 
+import org.junit.Test;
+
 import javax.print.DocFlavor;
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.channels.FileChannel;
 
 /**
- * 描述:
+ * 描述: 通道是一个蕴含煤炭的矿藏，而缓冲区是派送到矿藏运载煤炭的卡车。
  *
  * @author beyond233
  * @since 2020/12/6 0:28
  */
-public class Buffer$ {
+public class ByteBuffer$ {
 
     public static void main(String[] args) {
         String str = "beyond233";
@@ -31,7 +38,7 @@ public class Buffer$ {
         System.out.println("limit: " + buffer.limit());
         System.out.println("capacity: " + buffer.capacity());
 
-        // 3.切换为读取数据模式
+        // 3.flip()切换为读取数据模式
         buffer.flip();
 
         System.out.println("------------------>3.flip()切换为读取数据模式");
@@ -49,7 +56,7 @@ public class Buffer$ {
         System.out.println("position: -->first get" + buffer.position());
         System.out.println("limit: " + buffer.limit());
         System.out.println("capacity: " + buffer.capacity());
-        // 标记位置
+        // mark()标记位置
         buffer.mark();
         System.out.println("position: --> mark " + buffer.position());
 
@@ -57,7 +64,7 @@ public class Buffer$ {
         System.out.println(new String(dst,0,2));
         System.out.println("position: -->second get " + buffer.position());
 
-        // 回退到mark的位置
+        // reset()回退到mark的位置
         buffer.reset();
         buffer.get(dst, 0, 2);
         System.out.println(new String(dst,0,2));
@@ -82,9 +89,48 @@ public class Buffer$ {
         System.out.println("------------------>6.clear()清空缓冲区");
         System.out.println("position: " + buffer.position());
         System.out.println("limit: " + buffer.limit());
+
+
         System.out.println("capacity: " + buffer.capacity());
-
-
-
     }
+
+    @Test
+    public void test1() throws IOException {
+        FileChannel channel = new FileOutputStream("src/main/resources/hello.txt").getChannel();
+        // 删除hello.txt中原有内容，然后使用wrap()向缓冲区中写入新数据（因为指针从0开始）
+        channel.write(ByteBuffer.wrap("可".getBytes()));
+        // 移动指针到最末尾，这样写入的数据将会添加到原有内容的后面而不是覆盖掉之前的全部数据
+        channel.position(channel.size());
+        channel.write(ByteBuffer.wrap("真的不错呢".getBytes()));
+
+        channel.close();
+    }
+
+    @Test
+    public void getBasicData() {
+        ByteBuffer buffer = ByteBuffer.allocate(100);
+        // char
+//        buffer.asIntBuffer().put(4444);
+//        buffer.asCharBuffer().put("beyond");
+//        char c;
+//        while ((c = buffer.getChar()) != 0) {
+//            System.out.print(c);
+//        }
+
+        // int
+        buffer.asIntBuffer().put(new int[]{1, 2, 3});
+//        intBuffer.put(4);
+        buffer.asIntBuffer().put(444444444);
+        IntBuffer intBuffer = buffer.asIntBuffer();
+
+        int i;
+        while ((i =intBuffer.get()) != 0) {
+            System.out.println(i);
+        }
+        System.out.println("-----------------");
+        System.out.println(buffer.getInt());
+        System.out.println(buffer.getInt());
+    }
+
+
 }

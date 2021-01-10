@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
@@ -101,9 +102,9 @@ public class Channel$ {
     @Test
     public void scatteringAndGathering() throws IOException {
         RandomAccessFile inFile = new RandomAccessFile("src/main/resources/hello.txt", "rw");
-        // 1.
+        // 1.获取channel
         FileChannel inChannel = inFile.getChannel();
-        // 2.
+        // 2。构造字节缓冲区
         ByteBuffer buffer1 = ByteBuffer.allocate(2);
         ByteBuffer buffer2 = ByteBuffer.allocate(3);
 
@@ -122,8 +123,12 @@ public class Channel$ {
         outChannel.write(buffers);
     }
 
+    /**
+     *  字符集
+     * */
     @Test
     public void charset() {
+        // 获取可用的字符集
         SortedMap<String, Charset> map = Charset.availableCharsets();
 
         for (Map.Entry<String, Charset> entry : map.entrySet()) {
@@ -135,6 +140,49 @@ public class Channel$ {
         CharsetDecoder decoder = gbk.newDecoder();
 
     }
+
+    /**
+     * 写入时对数据进行编码，这样读出时才会正常
+     *
+     * 在读写buffer中数据时对其进行编解码，让其能够以正确的形式输出
+     * */
+    @Test
+    public void bufferCharsetWrite() throws Exception {
+        FileChannel channel = new FileOutputStream("src/main/resources/charset.txt").getChannel();
+        // 写入时对数据进行编码，这样读出时才会正常
+        channel.write(ByteBuffer.wrap("编码集".getBytes(StandardCharsets.UTF_16BE)));
+        channel.close();
+        // 读入
+        channel = new FileInputStream("src/main/resources/charset.txt").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        buffer.clear();
+        channel.read(buffer);
+        buffer.flip();
+        System.out.println(buffer.asCharBuffer());
+    }
+
+    /**
+     * 在读写buffer中数据时对其进行编解码，让其能够以正确的形式输出
+     * */
+    @Test
+    public void bufferCharsetRead() throws Exception {
+        FileChannel channel = new FileOutputStream("src/main/resources/charset.txt").getChannel();
+        // 写出时不进行相应编码
+        channel.write(ByteBuffer.wrap("编码集".getBytes()));
+        channel.close();
+        // 读入
+        channel = new FileInputStream("src/main/resources/charset.txt").getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        buffer.clear();
+        channel.read(buffer);
+        buffer.flip();
+        // 读取buffer中数据时使用平台默认字符集对其进行解码，这样读出时才会正常
+        Charset charset = Charset.forName(System.getProperty("file.encoding"));
+        System.out.println(charset.decode(buffer));
+//        System.out.println(StandardCharsets.UTF_8.decode(buffer));
+    }
+
+
 
 
 }
