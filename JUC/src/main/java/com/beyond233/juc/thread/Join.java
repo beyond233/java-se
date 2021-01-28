@@ -61,9 +61,5 @@ public class Join {
         //等待t2线程结束:只等待2秒
         t2.join(2000);
         log.debug("t2 join 结束");
-
     }
-
-
-
 }

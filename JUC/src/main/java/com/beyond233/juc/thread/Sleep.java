@@ -5,41 +5,41 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>é¡¹ç›®æ–‡æ¡£: </p>
+ * <p>ÏîÄ¿ÎÄµµ: </p>
  *
  * @author beyond233
  * @version 1.0
  * @since 2020-06-09 10:57
  */
-@Slf4j(topic = "sleepæ–¹æ³•")
+@Slf4j(topic = "sleep·½·¨")
 public class Sleep {
     public static void main(String[] args) {
         Thread t1 = new Thread("t1"){
             @Override
             public void run() {
-                log.debug("è¿›å…¥ç¡çœ å‰ï¼š"+this.getState().toString());
-                //çº¿ç¨‹å¯åŠ¨åä¸ºRUNNABLEçŠ¶æ€ï¼Œsleepæ–¹æ³•å¯åŠ¨åä¼šè½¬å˜ä¸ºTIMED_WAITINGçŠ¶æ€
+                log.debug("½øÈëË¯ÃßÇ°£º"+this.getState().toString());
+                //Ïß³ÌÆô¶¯ºóÎªRUNNABLE×´Ì¬£¬sleep·½·¨Æô¶¯ºó»á×ª±äÎªTIMED_WAITING×´Ì¬
                 try {
                     Thread.sleep(2000);
-                    log.debug("ç¡çœ ç»“æŸåï¼š"+this.getState().toString());
+                    log.debug("Ë¯Ãß½áÊøºó£º"+this.getState().toString());
                 } catch (InterruptedException e) {
-                    log.debug("ç¡çœ è¢«æ‰“æ–­ï¼š"+this.getState().toString());
+                    log.debug("Ë¯Ãß±»´ò¶Ï£º"+this.getState().toString());
                     e.printStackTrace();
                 }
             }
         };
 
         t1.start();
-        //è®©ä¸»çº¿ç¨‹ç¡çœ 1såï¼Œt1çº¿ç¨‹æ‰è‚¯å®šè¿›å…¥ç¡çœ ï¼Œæ‰èƒ½æ•æ‰ä»–çš„çŠ¶æ€
+        //ÈÃÖ÷Ïß³ÌË¯Ãß1sºó£¬t1Ïß³Ì²Å¿Ï¶¨½øÈëË¯Ãß£¬²ÅÄÜ²¶×½ËûµÄ×´Ì¬
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //çº¿ç¨‹å¯åŠ¨åä¸ºRUNNABLEçŠ¶æ€ï¼Œsleepæ–¹æ³•å¯åŠ¨åä¼šè½¬å˜ä¸ºTIMED_WAITINGçŠ¶æ€
-        log.debug("t1ç¡çœ ä¸­ï¼š"+t1.getState().toString());
+        //Ïß³ÌÆô¶¯ºóÎªRUNNABLE×´Ì¬£¬sleep·½·¨Æô¶¯ºó»á×ª±äÎªTIMED_WAITING×´Ì¬
+        log.debug("t1Ë¯ÃßÖĞ£º" + t1.getState().toString());
         t1.interrupt();
-        log.debug("t1è¢«æ‰“æ–­ï¼š"+t1.getState().toString());
+        log.debug("t1±»´ò¶Ï£º" + t1.getState().toString());
 
     }
 }

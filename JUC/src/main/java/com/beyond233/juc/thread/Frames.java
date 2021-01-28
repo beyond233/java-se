@@ -1,7 +1,7 @@
 package com.beyond233.juc.thread;
 
 /**
- * <p>项目文档: 栈与栈帧</p>
+ *  Thread and Thread Frames
  *
  * @author beyond233
  * @version 1.0
@@ -9,7 +9,10 @@ package com.beyond233.juc.thread;
  */
 public class Frames {
     public static void main(String[] args) {
-        method1(1);
+        // 1. t1 thread
+        new Thread(() -> method1(1), "t1").start();
+        // 2. main thread
+        method1(2);
     }
 
     public static void method1(int x){

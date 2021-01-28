@@ -14,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j(topic = "哲学家进餐问题")
 public class DeadLock {
     public static void main(String[] args) {
-        Chopstick  c1 = new Chopstick("1");
-        Chopstick  c2 = new Chopstick("2");
-        Chopstick  c3 = new Chopstick("3");
-        Chopstick  c4 = new Chopstick("4");
-        Chopstick  c5 = new Chopstick("5");
+        Chopstick c1 = new Chopstick("1");
+        Chopstick c2 = new Chopstick("2");
+        Chopstick c3 = new Chopstick("3");
+        Chopstick c4 = new Chopstick("4");
+        Chopstick c5 = new Chopstick("5");
 
         new Philosopher("p1", c1, c2).start();
         new Philosopher("p2", c2, c3).start();
@@ -31,11 +31,11 @@ public class DeadLock {
 
 
 /**
-* 模拟筷子
-* */
+ * 模拟筷子
+ */
 @Data
 @AllArgsConstructor
-class Chopstick{
+class Chopstick {
     private String name;
 
     @Override
@@ -46,39 +46,45 @@ class Chopstick{
 
 /**
  * 模拟哲学家
- * */
+ */
 @Slf4j(topic = "哲学家")
-class Philosopher extends Thread{
+class Philosopher extends Thread {
 
-    /**左手筷子*/
-    Chopstick left;
-    /**右手筷子*/
-    Chopstick right;
+    /**
+     * 左手筷子
+     */
+    final Chopstick left;
+    /**
+     * 右手筷子
+     */
+    final Chopstick right;
 
-    public Philosopher(String name,Chopstick left,Chopstick right){
+    public Philosopher(String name, Chopstick left, Chopstick right) {
         super(name);
         this.left = left;
         this.right = right;
     }
 
-    /**模拟吃饭*/
-    public void eat() throws InterruptedException {
+    /**
+     * 模拟吃饭
+     */
+    public void eat() {
         log.debug("吃饭");
-        sleep(1);
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void run() {
         while (true) {
             //拿起左手筷子
-            synchronized (left){
+            synchronized (left) {
                 //拿起右手筷子
-                synchronized (right){
-                    try {
-                        eat();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                synchronized (right) {
+                    eat();
                 }
                 // 放下右手筷子
             }

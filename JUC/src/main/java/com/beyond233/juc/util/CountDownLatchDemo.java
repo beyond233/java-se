@@ -3,7 +3,7 @@ package com.beyond233.juc.util;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * <p>项目文档:  CountDownLatch计数器</p>
+ * <p>项目文档:  CountDownLatch倒数计数器</p>
  *
  * @author beyond233
  * @version 1.0

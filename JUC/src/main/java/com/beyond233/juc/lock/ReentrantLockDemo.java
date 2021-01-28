@@ -14,11 +14,11 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ReentrantLockDemo {
     public static void main(String[] args) {
-        Chopstick1  c1 = new Chopstick1("1");
-        Chopstick1  c2 = new Chopstick1("2");
-        Chopstick1  c3 = new Chopstick1("3");
-        Chopstick1  c4 = new Chopstick1("4");
-        Chopstick1  c5 = new Chopstick1("5");
+        Chopstick1 c1 = new Chopstick1("1");
+        Chopstick1 c2 = new Chopstick1("2");
+        Chopstick1 c3 = new Chopstick1("3");
+        Chopstick1 c4 = new Chopstick1("4");
+        Chopstick1 c5 = new Chopstick1("5");
 
         new Philosopher1("p1", c1, c2).start();
         new Philosopher1("p2", c2, c3).start();
@@ -30,9 +30,10 @@ public class ReentrantLockDemo {
 
 /**
  * 模拟筷子
- * */
+ */
 @AllArgsConstructor
 class Chopstick1 extends ReentrantLock {
+    private static final long serialVersionUID = 263060022266101832L;
     private String name;
 
     @Override
@@ -43,22 +44,28 @@ class Chopstick1 extends ReentrantLock {
 
 /**
  * 模拟哲学家
- * */
+ */
 @Slf4j(topic = "哲学家")
-class Philosopher1 extends Thread{
+class Philosopher1 extends Thread {
 
-    /**左手筷子*/
+    /**
+     * 左手筷子
+     */
     Chopstick1 left;
-    /**右手筷子*/
+    /**
+     * 右手筷子
+     */
     Chopstick1 right;
 
-    public Philosopher1(String name,Chopstick1 left,Chopstick1 right){
+    public Philosopher1(String name, Chopstick1 left, Chopstick1 right) {
         super(name);
         this.left = left;
         this.right = right;
     }
 
-    /**模拟吃饭*/
+    /**
+     * 模拟吃饭
+     */
     public void eat() throws InterruptedException {
         log.debug("吃饭");
         sleep(1);
@@ -72,17 +79,17 @@ class Philosopher1 extends Thread{
                 try {
                     //拿起右手筷子
                     if (right.tryLock()) {
-                        try{
+                        try {
                             //吃饭
                             eat();
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
-                        }finally{
+                        } finally {
                             //释放锁：放下右手筷子
                             right.unlock();
                         }
                     }
-                }finally {
+                } finally {
                     //释放锁：放下左手筷子
                     left.unlock();
                 }
