@@ -33,7 +33,6 @@ public class User {
         this.age = age;
     }
 
-
     /**
      * 获取单例
      * DCL：double checked lock (双重检验锁)
@@ -50,4 +49,11 @@ public class User {
     }
 
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
