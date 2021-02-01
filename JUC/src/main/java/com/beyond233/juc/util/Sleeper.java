@@ -16,4 +16,13 @@ public class Sleeper {
             e.printStackTrace();
         }
     }
+
+    public static void mills(int time) {
+        try {
+            Thread.sleep(time * 100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
