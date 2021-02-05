@@ -1,7 +1,5 @@
 package com.beyond233.juc.threadpool;
 
-import sun.nio.ch.ThreadPool;
-
 import java.util.concurrent.*;
 
 /**
@@ -29,20 +27,19 @@ public class ExecutorDemo {
         //2.2创建线程工厂
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         //2.3创建拒绝策略处理器: 总共4种。超过线程池最大承载数时由拒绝策略处理器来处理多余的连接请求
-            //第一种  中止策略：超过线程池最大承载数时直接中止,即抛出异常RejectedExecutionException
+        //第一种  中止策略：超过线程池最大承载数时直接中止,即抛出异常RejectedExecutionException
         ThreadPoolExecutor.AbortPolicy abortPolicy = new ThreadPoolExecutor.AbortPolicy();
-            //第二种  回调策略：超过线程池最大承载数时由原来调用它的线程去执行它
+        //第二种  回调策略：超过线程池最大承载数时由原来调用它的线程去执行它
         ThreadPoolExecutor.CallerRunsPolicy callerRunsPolicy = new ThreadPoolExecutor.CallerRunsPolicy();
-            //第三种  抛弃最老策略：尝试和最早的去竞争，竞争成功则执行
+        //第三种  抛弃最老策略：尝试和最早的去竞争，竞争成功则执行
         ThreadPoolExecutor.DiscardOldestPolicy discardOldestPolicy = new ThreadPoolExecutor.DiscardOldestPolicy();
-            //第四种  抛弃策略：直接抛弃多的任务，不会抛出异常
+        //第四种  抛弃策略：直接抛弃多的任务，不会抛出异常
         ThreadPoolExecutor.DiscardPolicy discardPolicy = new ThreadPoolExecutor.DiscardPolicy();
         //2.4创建线程池： 线程池最大承载数=线程池最大连接数+阻塞队列大小，超过最大承载则抛出异常RejectedExecutionException
         //线程池最大数量定义规则：  1.CPU密集型：按照CPU核数，几核就是几个并行线程； 2.IO密集型：判断程序中大型复杂且消耗大量IO资源的线程有多少个
         //获取CPU最大核数,以此规定线程池最大数量
         int processors = Runtime.getRuntime().availableProcessors();
-        ExecutorService pool = new ThreadPoolExecutor(2,5,3, TimeUnit.SECONDS,queue,threadFactory,discardOldestPolicy);
-
+        ExecutorService pool = new ThreadPoolExecutor(2, 5, 3, TimeUnit.SECONDS, queue, threadFactory, discardOldestPolicy);
 
 
         //3.测试线程池创建线程
@@ -51,9 +48,7 @@ public class ExecutorDemo {
             for (int i = 0; i < 20; i++) {
                 int t = i;
                 //实现runnable接口方法并启动线程
-                pool.execute(()->{
-                    System.out.println(t+" "+Thread.currentThread().getName());
-                });
+                pool.execute(() -> System.out.println(t + " " + Thread.currentThread().getName()));
             }
         } catch (Exception e) {
             e.printStackTrace();

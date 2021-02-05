@@ -1,4 +1,4 @@
-package com.beyond233.juc.practice;
+package com.beyond233.juc.mode;
 
 import lombok.extern.slf4j.Slf4j;
 

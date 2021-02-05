@@ -19,11 +19,11 @@ public class GroupChatServer {
 
     /**
      * selector
-     * */
+     */
     private Selector selector;
     /**
      * serverSocketChannel
-     * */
+     */
     private ServerSocketChannel listenChannel;
     /**
      * port
@@ -31,7 +31,7 @@ public class GroupChatServer {
     private static final int PORT = 6666;
 
     /**
-     *  init selector、listenChannel、port
+     * init selector、listenChannel、port
      *
      * @since 2021/1/2 23:41
      */

@@ -1,4 +1,4 @@
-package com.beyond233.juc.practice;
+package com.beyond233.juc.mode;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
