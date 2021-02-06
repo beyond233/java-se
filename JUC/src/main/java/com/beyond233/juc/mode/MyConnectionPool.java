@@ -90,7 +90,7 @@ class MyConnection {
 
     public MyConnection() {
         // 模拟构造连接需要花费的时间
-        Sleeper.mills(1);
+        Sleeper.millisecond(1);
     }
 }
 
@@ -104,7 +104,7 @@ class Test {
             list.add(new Thread(() -> {
                 MyConnection connection = pool.get();
                 log.info(connection.toString());
-                Sleeper.mills(3);
+                Sleeper.millisecond(3);
                 pool.release(connection);
             }, "t" + i));
         }

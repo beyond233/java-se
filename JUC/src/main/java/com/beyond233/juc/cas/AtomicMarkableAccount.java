@@ -36,7 +36,7 @@ public class AtomicMarkableAccount implements AtomicAccount<Integer> {
         new Thread(() -> account.withDraw(1)).start();
         new Thread(() -> account.withDraw(1)).start();
 
-        Sleeper.sleep(1);
+        Sleeper.second(1);
         System.out.println("balance=" + account.balance());
     }
 

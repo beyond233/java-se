@@ -46,7 +46,7 @@ public class LockCas {
         new Thread(() -> {
             lock.lock();
             log.info("拿到锁,先睡会儿觉");
-            Sleeper.sleep(1);
+            Sleeper.second(1);
             lock.unlock();
         }, "t1").start();
 

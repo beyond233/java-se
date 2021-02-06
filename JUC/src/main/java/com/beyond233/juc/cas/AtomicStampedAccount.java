@@ -37,7 +37,7 @@ public class AtomicStampedAccount implements AtomicAccount<Integer> {
     public void other() {
         new Thread(() -> withDraw(10)).start();
         new Thread(() -> withDraw(-10)).start();
-        Sleeper.sleep(1);
+        Sleeper.second(1);
         System.out.println("balance=" + balance() + " stamp=" + balance.getStamp());
 
     }
