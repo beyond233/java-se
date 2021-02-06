@@ -1,9 +1,11 @@
 package com.beyond233.function;
 
-import com.oracle.webservices.internal.api.databinding.DatabindingMode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
+
+import java.time.LocalDate;
 
 /**
  * <p>项目文档: </p>
@@ -15,9 +17,10 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @ToString
+@Accessors(chain = true)
 public class User {
     private int id;
     private String name;
     private int age;
-
+    private LocalDate birthday;
 }
