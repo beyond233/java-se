@@ -6,10 +6,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>
- *     项目文档: 信号量，信号标
- *     应用场景：限流
- * </p>
+ * 项目文档: 信号量，信号标 ： 用来限制能同时访问共享资源的线程上限。
+ * 应用场景：限流
  *
  * @author beyond233
  * @version 1.0
@@ -21,21 +19,21 @@ public class SemaphoreDemo {
         //5个车位
         Semaphore semaphore = new Semaphore(5);
 
-        for (int i = 0; i < 5;   i++) {
+        for (int i = 0; i < 5; i++) {
             new Thread(() -> {
                 try {
-                    //acquire()：抢占车位,总车位减1
+                    //1.acquire()：抢占车位,总车位减1
                     semaphore.acquire();
-                    log.debug("抢占了一个车位,车位剩余："+semaphore.availablePermits());
+                    log.debug("抢占了一个车位,车位剩余：" + semaphore.availablePermits());
                     TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }finally{
-                    //release()：释放车位、总车位加1
+                } finally {
+                    //2.release()：释放车位、总车位加1
                     semaphore.release();
-                    log.debug("释放了一个车位,车位剩余："+semaphore.availablePermits());
+                    log.debug("释放了一个车位,车位剩余：" + semaphore.availablePermits());
                 }
-            },String.valueOf(i)).start();
+            }, String.valueOf(i)).start();
         }
     }
 }
