@@ -1,4 +1,4 @@
-package com.beyond233.java.se.nio.buffer;
+package com.beyond233.java.se.nio.demo;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -12,7 +12,7 @@ import java.nio.channels.SocketChannel;
  * @version 1.0
  * @since 2021-01-02 18:30
  */
-public class Client {
+public class ClientDemo {
 
     public static void main(String[] args) throws IOException {
         // 获取一个socketChannel
@@ -37,7 +37,6 @@ public class Client {
             socketChannel.write(buffer);
 
         }
-
 
 
     }

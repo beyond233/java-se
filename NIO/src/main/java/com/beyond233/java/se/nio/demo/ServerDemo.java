@@ -1,6 +1,4 @@
-package com.beyond233.java.se.nio.buffer;
-
-import jdk.jfr.events.SocketReadEvent;
+package com.beyond233.java.se.nio.demo;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -19,7 +17,7 @@ import java.util.Set;
  * @version 1.0
  * @since 2021-01-02 16:57
  */
-public class Server {
+public class ServerDemo {
 
     public static void main(String[] args) throws IOException {
         // 1.创建serverSocketChannel
@@ -67,7 +65,7 @@ public class Server {
                     ByteBuffer byteBuffer = (ByteBuffer) key.attachment();
                     // 读取数据到buffer
                     socketChannel.read(byteBuffer);
-                    System.out.println("客户端数据为： "+new String(byteBuffer.array()));
+                    System.out.println("客户端数据为： " + new String(byteBuffer.array()));
                 }
 
                 // 移除selectionKey，防止重复操作

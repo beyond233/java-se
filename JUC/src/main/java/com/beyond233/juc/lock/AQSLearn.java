@@ -42,7 +42,7 @@ public class AQSLearn {
         /**
          * AQS实现独占锁同步器
          */
-        class MySync extends AbstractQueuedSynchronizer {
+        static class MySync extends AbstractQueuedSynchronizer {
 
             private static final long serialVersionUID = -2106799198215749249L;
 
