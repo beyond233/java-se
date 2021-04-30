@@ -2,11 +2,9 @@ package com.beyond233.java.se.nio.buffer;
 
 import org.junit.Test;
 
-import javax.print.DocFlavor;
-import javax.swing.*;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
@@ -61,13 +59,13 @@ public class ByteBuffer$ {
         System.out.println("position: --> mark " + buffer.position());
 
         buffer.get(dst, 0, 2);
-        System.out.println(new String(dst,0,2));
+        System.out.println(new String(dst, 0, 2));
         System.out.println("position: -->second get " + buffer.position());
 
         // reset()回退到mark的位置
         buffer.reset();
         buffer.get(dst, 0, 2);
-        System.out.println(new String(dst,0,2));
+        System.out.println(new String(dst, 0, 2));
         System.out.println("position: -->third get " + buffer.position());
 
         // 7.判断缓冲区中是否还有数据
@@ -124,12 +122,54 @@ public class ByteBuffer$ {
         IntBuffer intBuffer = buffer.asIntBuffer();
 
         int i;
-        while ((i =intBuffer.get()) != 0) {
+        while ((i = intBuffer.get()) != 0) {
             System.out.println(i);
         }
         System.out.println("-----------------");
         System.out.println(buffer.getInt());
         System.out.println(buffer.getInt());
+    }
+
+    @Test
+    public void test2() throws IOException {
+        RandomAccessFile file = new RandomAccessFile("src/main/resources/data.txt", "rw");
+        FileChannel channel = file.getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate(10);
+        ByteBuffer b1 = null;
+        ByteBuffer b2 = null;
+        do {
+            // 向buffer写入
+            int len = channel.read(buffer);
+
+            System.out.println("len = " + len);
+            if (len == -1) {
+                break;
+            }
+
+            // 切换为读模式
+            buffer.flip();
+            while (buffer.hasRemaining()) {
+                char c = (char) buffer.get();
+                System.out.println(c);
+//                buffer.rewind();
+                if (c == '3') {
+                    buffer.mark();
+                    b1 = buffer;
+                }
+
+                if (c == 'b') {
+                    buffer.mark();
+                    b2 = buffer;
+                }
+            }
+            // reset()前必须要mark，原因看reset源码就懂了
+            buffer.reset();
+            System.out.println("xxxxxxxxxxxx:  " + (char) buffer.get());
+            // 切换为写模式
+            buffer.clear();
+        } while (true);
+
+        System.out.println(b1 == b2);
     }
 
 
