@@ -1,7 +1,11 @@
-/*
+package com.beyond233.java.se.nio.util;
+
 import io.netty.util.internal.StringUtil;
 
 import java.nio.ByteBuffer;
+
+import static io.netty.util.internal.MathUtil.isOutOfBounds;
+import static io.netty.util.internal.StringUtil.NEWLINE;
 
 public class ByteBufferUtil {
     private static final char[] BYTE2CHAR = new char[256];
@@ -65,16 +69,11 @@ public class ByteBufferUtil {
         }
     }
 
-    */
-/**
- * 打印所有内容
- *
- * @param buffer
- * <p>
- * 打印可读取内容
- * @param buffer
- *//*
-
+    /**
+     * 打印所有内容
+     *
+     * @param buffer
+     */
     public static void debugAll(ByteBuffer buffer) {
         int oldlimit = buffer.limit();
         buffer.limit(buffer.capacity());
@@ -86,12 +85,11 @@ public class ByteBufferUtil {
         buffer.limit(oldlimit);
     }
 
-    */
-/**
- * 打印可读取内容
- * @param buffer
- *//*
-
+    /**
+     * 打印可读取内容
+     *
+     * @param buffer
+     */
     public static void debugRead(ByteBuffer buffer) {
         StringBuilder builder = new StringBuilder(256);
         appendPrettyHexDump(builder, buffer, buffer.position(), buffer.limit() - buffer.position());
@@ -178,4 +176,4 @@ public class ByteBufferUtil {
     public static short getUnsignedByte(ByteBuffer buffer, int index) {
         return (short) (buffer.get(index) & 0xFF);
     }
-}*/
+}

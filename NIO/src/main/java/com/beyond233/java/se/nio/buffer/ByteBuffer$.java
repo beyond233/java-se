@@ -1,5 +1,6 @@
 package com.beyond233.java.se.nio.buffer;
 
+import com.beyond233.java.se.nio.util.ByteBufferUtil;
 import org.junit.Test;
 
 import java.io.FileOutputStream;
@@ -8,6 +9,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 描述: 通道是一个蕴含煤炭的矿藏，而缓冲区是派送到矿藏运载煤炭的卡车。
@@ -17,7 +19,7 @@ import java.nio.channels.FileChannel;
  */
 public class ByteBuffer$ {
 
-    public static void main(String[] args) {
+    public void test() {
         String str = "beyond233";
 
         // 1.分配一个指定大小的非直接缓冲区
@@ -151,7 +153,7 @@ public class ByteBuffer$ {
             while (buffer.hasRemaining()) {
                 char c = (char) buffer.get();
                 System.out.println(c);
-//                buffer.rewind();
+                buffer.rewind();
                 if (c == '3') {
                     buffer.mark();
                     b1 = buffer;
@@ -169,7 +171,138 @@ public class ByteBuffer$ {
             buffer.clear();
         } while (true);
 
+
         System.out.println(b1 == b2);
+    }
+
+    @Test
+    public void test3() {
+        ByteBuffer buffer = ByteBuffer.allocate(10);
+        buffer.put((byte) 0x61);
+        ByteBufferUtil.debugAll(buffer);
+
+        buffer.put(new byte[]{0x62, 0x63, 0x64});
+        ByteBufferUtil.debugAll(buffer);
+
+        buffer.flip();
+        System.out.println(buffer.get());
+        ByteBufferUtil.debugAll(buffer);
+
+        // compact 方法，是把未读完的部分向前压缩，然后切换至写模式
+        buffer.compact();
+        ByteBufferUtil.debugAll(buffer);
+    }
+
+    @Test
+    public void test4() {
+        // Java堆内存，读写效率低，收到GC的影响
+        System.out.println(ByteBuffer.allocate(10).getClass());
+        // 直接内存，读写效率高（少一次拷贝），不会受到GC的影响， 分配的效率低
+        System.out.println(ByteBuffer.allocateDirect(10).getClass());
+    }
+
+    @Test
+    public void test5() {
+        ByteBuffer buffer = ByteBuffer.allocate(10);
+        buffer.put(new byte[]{'a', 'b', 'c', 'd'});
+        buffer.flip();
+
+        buffer.get(new byte[4]);
+        ByteBufferUtil.debugAll(buffer);
+        // position置为0，重置mark标记
+        buffer.rewind();
+        ByteBufferUtil.debugAll(buffer);
+
+        System.out.println(buffer.position());
+        // get(int i)不会移动position，而get()会
+        buffer.get(1);
+        System.out.println(buffer.position());
+    }
+
+    /**
+     * string和bytebuffer的转换
+     */
+    @Test
+    public void test6() {
+        // string  -> bytebuffer
+        // 1.转换后还是为写模式，position为5，limit为10
+        ByteBuffer buffer = ByteBuffer.allocate(10);
+        buffer.put("hello".getBytes(StandardCharsets.UTF_8));
+        ByteBufferUtil.debugAll(buffer);
+
+        // 2. 转为buffer后会自动切换为读模式，position为0，limit为5
+        ByteBuffer buffer1 = StandardCharsets.UTF_8.encode("hello");
+        ByteBufferUtil.debugAll(buffer1);
+
+        // 3.   转为buffer后会自动切换为读模式，position为0，limit为5
+        ByteBuffer buffer2 = ByteBuffer.wrap("hello".getBytes());
+        ByteBufferUtil.debugAll(buffer2);
+
+        //  bytebuffer -> string
+        System.out.println(StandardCharsets.UTF_8.decode(buffer1));
+
+        buffer.flip();
+        System.out.println(StandardCharsets.UTF_8.decode(buffer));
+    }
+
+    /**
+     * 分散读取
+     */
+    @Test
+    public void scatterRead() throws IOException {
+        FileChannel channel = new RandomAccessFile("src/main/resources/world.txt", "rw").getChannel();
+        ByteBuffer buffer1 = ByteBuffer.allocate(5);
+        ByteBuffer buffer2 = ByteBuffer.allocate(1);
+        ByteBuffer buffer3 = ByteBuffer.allocate(5);
+        channel.read(new ByteBuffer[]{buffer1, buffer2, buffer3});
+        buffer1.flip();
+        buffer2.flip();
+        buffer3.flip();
+        System.out.println(StandardCharsets.UTF_8.decode(buffer1));
+        System.out.println(StandardCharsets.UTF_8.decode(buffer2));
+        System.out.println(StandardCharsets.UTF_8.decode(buffer3));
+
+
+    }
+
+    /**
+     * 聚集写入
+     */
+    @Test
+    public void s() throws IOException {
+        ByteBuffer b1 = StandardCharsets.UTF_8.encode("hello");
+        ByteBuffer b2 = StandardCharsets.UTF_8.encode(" ");
+        ByteBuffer b3 = StandardCharsets.UTF_8.encode("world");
+
+        FileChannel channel = new FileOutputStream("src/main/resources/world" + Math.random() * 10 + ".txt").getChannel();
+        channel.write(new ByteBuffer[]{b1, b2, b3});
+    }
+
+    /**
+     * 黏包和半包
+     */
+    public static void main(String[] args) {
+        ByteBuffer source = ByteBuffer.allocate(32);
+        source.put("hello ,i'm jack.\n ho".getBytes());
+        split(source);
+        source.put("w are you?\n".getBytes());
+        split(source);
+    }
+
+    public static void split(ByteBuffer source) {
+        source.flip();
+        ByteBufferUtil.debugAll(source);
+        for (int i = 0; i < source.limit(); i++) {
+            if (source.get(i) == '\n') {
+                int length = i + 1 - source.position();
+                ByteBuffer target = ByteBuffer.allocate(length);
+                for (int j = 0; j < length; j++) {
+                    target.put(source.get());
+                }
+                ByteBufferUtil.debugAll(target);
+            }
+        }
+        source.compact();
     }
 
 
