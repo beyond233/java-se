@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author beyond233
  * @since 2021/5/2 21:48
  */
-public class MyBlockServer {
+public class TestServer {
     public static void main(String[] args) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(32);
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
