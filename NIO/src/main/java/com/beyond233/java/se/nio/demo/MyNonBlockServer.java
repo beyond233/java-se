@@ -16,7 +16,7 @@ import java.util.Set;
  * @since 2021/2/14 23:06
  */
 @Slf4j
-public class MyServer {
+public class MyNonBlockServer {
     /**
      * buffer缓冲区大小
      */
@@ -38,7 +38,7 @@ public class MyServer {
      */
     private int remoteClientNum = 0;
 
-    public MyServer(int port) {
+    public MyNonBlockServer(int port) {
         try {
             // 在构造函数中初始化channel监听
             init(port);
@@ -172,6 +172,6 @@ public class MyServer {
     }
 
     public static void main(String[] args) throws IOException {
-        new MyServer(9999).listen();
+        new MyNonBlockServer(9999).listen();
     }
 }

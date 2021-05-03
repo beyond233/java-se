@@ -9,7 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>nio</module>
+        <module>NIO</module>
+        <module>JUC</module>
+        <module>JDK8NewFeature</module>
     </modules>
 
 
