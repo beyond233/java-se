@@ -35,8 +35,9 @@ public class MyClient {
         System.out.println("====Client====\n");
         // init
         socketChannel = SocketChannel.open();
-        socketChannel.connect(new InetSocketAddress(port));
         socketChannel.configureBlocking(false);
+        // 异步连接服务端: 如果返回false说明客户端已发送sync包，但服务端还没返回ack包，物理链路还没建立
+        boolean connect = socketChannel.connect(new InetSocketAddress(port));
         byteBuffer = ByteBuffer.allocate(capacity);
         // receive
         receive();
